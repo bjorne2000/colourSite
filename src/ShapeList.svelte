@@ -34,6 +34,18 @@
             onSave(shapes);
         }
     }
+
+    function deleteAll(){
+        if(shapes.length === 0){
+            return;
+        }
+        
+            
+        if (window.confirm("Are you sure you want to delete all shapes?")) {
+            shapes = [];
+            onSave(shapes);
+        }
+    }
 </script>
 
 <div>
@@ -46,6 +58,8 @@
     </select>
     <button on:click={editShape}>Edit</button>
     <button on:click={copyShape}>Copy</button>
+    <button on:click={deleteShape}>Delete</button>
+    <button on:click={deleteAll}>Delete all</button>
 </div>
 
 {#if showEditArea && selectedShapeIndex !== null}
@@ -65,7 +79,7 @@
         
         <button on:click={saveShapes}>Save</button>
         <button on:click={closeEditArea}>Close</button>
-        <button on:click={deleteShape}>Delete</button>
+        
     </div>
 {/if}
 

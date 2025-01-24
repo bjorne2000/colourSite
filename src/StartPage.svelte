@@ -4,11 +4,13 @@
     import Navbar from './Navbar.svelte';
     import Create from './custom/Create.svelte';
     import ShapeList from './ShapeList.svelte';
+    import SaveList from './SaveList.svelte';
+    import SaveFiles from './SaveFiles.svelte';
 
     let savedColor = { r: 225, g: 225, b: 225, a: 1 };
     let customHeight = '100px';
-    let customWidth = '100px';
-    let customBorder = '100px';
+    let customWidth = '300px';
+    let customBorder = '10px';
     let customRotate = '0deg';
     let shapes = [];
 
@@ -18,6 +20,10 @@
 
     function updateShapes(updatedShapes) {
         shapes = updatedShapes;
+    }
+
+    function loadShapesFromFile(loadedShapes) {
+        shapes = loadedShapes;
     }
 
 </script>
@@ -34,6 +40,8 @@
 </div>
 <div class="right">
     <ShapeList {shapes} onSave={updateShapes}/>
+    <SaveList {shapes} />
+    <SaveFiles onLoad={loadShapesFromFile} />
 </div>
 </div>
 

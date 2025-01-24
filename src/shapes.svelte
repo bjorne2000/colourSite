@@ -31,7 +31,6 @@
             top = `${event.clientY - offsetY}px`;
         }
     }
-
     function handleMouseUp() {
         isDragging = false;
         window.removeEventListener('mousemove', handleMouseMove);
@@ -41,14 +40,13 @@
 
     function changeColor() {
         currentColor = `rgba(${savedColor.r}, ${savedColor.g}, ${savedColor.b}, ${savedColor.a})`;
-        console.log('Rectangle clicked, color changed to:', currentColor);
+        
     }
 </script>
 
 <button
     class="rectangle"
     on:click={changeColor}
-    
     on:keydown={(e) => e.key === 'Enter' && changeColor()}
     style="background-color: {currentColor}; width: {width}; height: {height};
      border-radius: {borderRadius}; rotate: {rotation}; margin-top: {topMargin}; 

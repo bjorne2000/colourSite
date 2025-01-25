@@ -12,7 +12,7 @@
         display: flex;
         flex-direction: column;
         margin: 10px;
-        max-width: 300px; /* Set a maximum width for the container */
+        max-width: 300px; 
     }
 
     label {
@@ -22,7 +22,7 @@
     input {
         
         margin-bottom: 10px;
-        width: 100%; /* Make the input field take the full width of the container */
-        box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        width: 100%; 
+        box-sizing: border-box; 
     }
 </style>

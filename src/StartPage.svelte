@@ -47,11 +47,13 @@
         
         <Create bind:width={customWidth} bind:height={customHeight} bind:borderRadius={customBorder} bind:rotation={customRotate} bind:savedColor={savedColor} {createShape} />  
     </div>
-    <div class="content">       
+    <div class="content"> 
+                <!-- renders all created shapes       -->
             {#each shapes as shape}
                 <Shapes width={shape.width} height={shape.height} borderRadius={shape.borderRadius} rotation={shape.rotation} 
                 savedColor={savedColor}/>
             {/each}
+            <!-- renders all shapes loaded from local storage -->
             {#each loadShapes as shape}             
                 <Shapes width={shape.width} height={shape.height} borderRadius={shape.borderRadius} rotation={shape.rotation} 
                 loadColor={shape.loadColor} savedColor={savedColor}/>

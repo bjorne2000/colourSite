@@ -52,7 +52,9 @@ function saveColor(){
       border-radius: 10px;
       height: 50px;
       width: 100px;
-      background-color: rgb(148, 191, 199);
+      background-color: rgb(41, 172, 41);
+      color: white;
+      border: black 2px solid;
   }
 </style>
 

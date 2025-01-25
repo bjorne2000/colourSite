@@ -13,6 +13,7 @@
     function loadFromLocalStorage() {
         if (selectedFile.trim() === '') {
             alert('Please select a file to load.');
+            console.log("funkar");
             return;
         }
         const shapes = JSON.parse(localStorage.getItem(selectedFile));

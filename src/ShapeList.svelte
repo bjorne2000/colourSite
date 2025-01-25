@@ -35,12 +35,10 @@
         }
     }
 
-    function deleteAll(){
-        if(shapes.length === 0){
+    function deleteAll() {
+        if (shapes.length === 0) {
             return;
         }
-        
-            
         if (window.confirm("Are you sure you want to delete all shapes?")) {
             shapes = [];
             onSave(shapes);
@@ -56,6 +54,9 @@
             <option value={index}>Shape {index + 1}: {shape.width} x {shape.height}, Border: {shape.borderRadius}</option>
         {/each}
     </select>
+    {#if selectedShapeIndex !== null}
+        <div id="color" style="background-color: rgba({shapes[selectedShapeIndex].savedColor.r}, {shapes[selectedShapeIndex].savedColor.g}, {shapes[selectedShapeIndex].savedColor.b}, {shapes[selectedShapeIndex].savedColor.a}); width: 50px; height: 50px; border: 1px solid #ccc; margin-top: 10px;"></div>
+    {/if}
     <button on:click={editShape}>Edit</button>
     <button on:click={copyShape}>Copy</button>
     <button on:click={deleteShape}>Delete</button>
@@ -77,9 +78,12 @@
         <label for="rotation">Rotation:</label>
         <input id="rotation" type="text" bind:value={shapes[selectedShapeIndex].rotation} />
         
+        <label for="color">Color:</label>
+        <div id="color" style="background-color: rgba({shapes[selectedShapeIndex].savedColor.r}, {shapes[selectedShapeIndex].savedColor.g}, {shapes[selectedShapeIndex].savedColor.b}, {shapes[selectedShapeIndex].savedColor.a}); width: 50px; height: 50px; border: 1px solid #ccc;"></div>
+        
         <button on:click={saveShapes}>Save</button>
         <button on:click={closeEditArea}>Close</button>
-        
+        <button on:click={deleteShape}>Delete</button>
     </div>
 {/if}
 
@@ -117,5 +121,10 @@
     .edit-area label {
         display: block;
         margin-bottom: 5px;
+    }
+
+    .edit-area #color {
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
     }
 </style>

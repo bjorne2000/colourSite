@@ -1,21 +1,25 @@
 <script>
+    import SaveList from './SaveList.svelte';
+    import SaveFiles from './SaveFiles.svelte';
+    import ShapeList from './ShapeList.svelte';
+    import Create from './custom/Create.svelte';
     import ColourWheel from './ColourWheel.svelte';
     import Shapes from './shapes.svelte';
     import Navbar from './Navbar.svelte';
-    import Create from './custom/Create.svelte';
-    import ShapeList from './ShapeList.svelte';
-    import SaveList from './SaveList.svelte';
-    import SaveFiles from './SaveFiles.svelte';
 
-    let savedColor = { r: 225, g: 225, b: 225, a: 1 };
+    let savedColor = { r: 255, g: 255, b: 255, a: 1};
+    let loadColor = { r: 100, g: 100, b: 100, a: 1};
     let customHeight = '100px';
     let customWidth = '300px';
     let customBorder = '10px';
     let customRotate = '0deg';
-    let shapes = [];
-
+    let colorEnabled = false;
+    export let shapes = [];
+    let loadShapes = [];
+    console.log("loggar");
     function createShape() {
-        shapes = [...shapes, { width: customWidth, height: customHeight, borderRadius: customBorder, rotation: customRotate, savedColor }];
+        shapes = [...shapes, { width: customWidth, height: customHeight, borderRadius: customBorder, rotation: customRotate, 
+            savedColor: { ...savedColor }, loadColor: { ...loadColor } }];
     }
 
     function updateShapes(updatedShapes) {
@@ -23,30 +27,49 @@
     }
 
     function loadShapesFromFile(loadedShapes) {
-        shapes = loadedShapes;
-    }
+        console.log("funkar");
 
+        loadShapes = loadedShapes.map(shape => ({
+            ...shape,
+            loadColor: shape.savedColor
+        }));
+        
+        
+    }
+    $: combinedShapes = [...shapes, ...loadShapes];
 </script>
+
 <div class="container">
     <Navbar />
-<div class="left">
-    <ColourWheel --picker-height="500px" --picker-width="50px" bind:savedColor={savedColor}/>	
-    <Create bind:width={customWidth} bind:height={customHeight} bind:borderRadius={customBorder} {createShape} />	
-</div>
-<div class="content">
-    {#each shapes as shape}
-    <Shapes width={shape.width} height={shape.height} borderRadius={shape.borderRadius} rotation={shape.rotation} savedColor={savedColor}/>
-    {/each}
-</div>
-<div class="right">
-    <ShapeList {shapes} onSave={updateShapes}/>
-    <SaveList {shapes} />
-    <SaveFiles onLoad={loadShapesFromFile} />
-</div>
+    <div class="left">
+        
+            <ColourWheel --picker-height="500px" --picker-width="50px" bind:savedColor={savedColor}/>    
+        
+        <Create bind:width={customWidth} bind:height={customHeight} bind:borderRadius={customBorder} bind:rotation={customRotate} bind:savedColor={savedColor} {createShape} />  
+    </div>
+    <div class="content">       
+            {#each shapes as shape}
+                <Shapes width={shape.width} height={shape.height} borderRadius={shape.borderRadius} rotation={shape.rotation} 
+                savedColor={savedColor}/>
+            {/each}
+            {#each loadShapes as shape}             
+                <Shapes width={shape.width} height={shape.height} borderRadius={shape.borderRadius} rotation={shape.rotation} 
+                loadColor={shape.loadColor} savedColor={savedColor}/>
+            {/each}
+
+        
+
+    </div>
+    <div class="right">
+        
+        <ShapeList shapes={combinedShapes} onSave={updateShapes}/>
+        <SaveList shapes={combinedShapes} />
+        <SaveFiles onLoad={loadShapesFromFile} />
+    </div>
 </div>
 
 <style>
-        .container {
+    .container {
         display: flex;
         flex-direction: row;
         margin-top: 60px; 
@@ -73,7 +96,7 @@
         top: 0;
         right: 0;
         padding: 10px;
-        margin-top: 60px;
         background-color: #f0f0f0;
+        padding-top: 60px;
     }
 </style>

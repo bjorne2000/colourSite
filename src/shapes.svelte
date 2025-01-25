@@ -1,5 +1,6 @@
 <script>
     export let savedColor = { r: 255, g: 255, b: 255, a: 1 }; // Default color
+    export let loadColor = { r: 100, g: 100, b: 100, a: 1};
     export let width; // Default width
     export let height;  // Default height
     export let borderRadius;
@@ -15,7 +16,8 @@
     
     let isDragging = false;
     let offsetX, offsetY; 
-    let currentColor = `rgba(${savedColor.r}, ${savedColor.g}, ${savedColor.b}, ${savedColor.a})`;
+    let currentColor;
+    $: currentColor = `rgba(${loadColor.r}, ${loadColor.g}, ${loadColor.b}, ${loadColor.a})`;
 
     function handleMouseDown(event) {
         isDragging = true;
@@ -39,8 +41,7 @@
     
 
     function changeColor() {
-        currentColor = `rgba(${savedColor.r}, ${savedColor.g}, ${savedColor.b}, ${savedColor.a})`;
-        
+        currentColor = `rgba(${savedColor.r}, ${savedColor.g}, ${savedColor.b}, ${savedColor.a})`; 
     }
 </script>
 

@@ -2,7 +2,7 @@
     export let height;
 </script>
 <div>
-    <label for="inputWidth">width</label>
+    <label for="inputWidth">heigth</label>
     <input type="text" id="inputWidth" bind:value={height} width="300px"/>
 </div>
 

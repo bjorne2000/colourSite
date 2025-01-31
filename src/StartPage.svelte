@@ -13,17 +13,46 @@
     let customWidth = '300px';
     let customBorder = '10px';
     let customRotate = '0deg';
-    let colorEnabled = false;
+    let savingList = [];
+    let combinedShapes = [];
     export let shapes = [];
     let loadShapes = [];
     console.log("loggar");
+
     function createShape() {
-        shapes = [...shapes, { width: customWidth, height: customHeight, borderRadius: customBorder, rotation: customRotate, 
-            savedColor: { ...savedColor }, loadColor: { ...loadColor } }];
+        const newShape = {
+            width: customWidth,
+            height: customHeight,
+            borderRadius: customBorder,
+            rotation: customRotate,
+            loadTop: '0px',
+            loadLeft: '0px',
+            savedColor: { ...savedColor },
+            loadColor: { ...loadColor }
+        };
+        shapes = [...shapes, newShape];
     }
 
     function updateShapes(updatedShapes) {
         shapes = updatedShapes;
+    }
+
+    function handleColorChange(event, index) {
+        const colorString = event.detail.color;
+        const colorMatch = colorString.match(/rgba?\((\d+), (\d+), (\d+)(?:, (\d+(\.\d+)?))?\)/);
+        if (colorMatch) {
+            const [_, r, g, b, a] = colorMatch;
+            const colorObject = { r: parseInt(r), g: parseInt(g), b: parseInt(b), a: a ? parseFloat(a) : 1 };
+            combinedShapes[index].savedColor = colorObject;
+            combinedShapes[index].loadColor = colorObject;
+            combinedShapes = [...combinedShapes];
+        }
+    }
+
+    function handlePositionChange(event, index) {
+        combinedShapes[index].loadTop = event.detail.top;
+        combinedShapes[index].loadLeft = event.detail.left;
+        combinedShapes = [...combinedShapes];
     }
 
     function loadShapesFromFile(loadedShapes) {
@@ -31,11 +60,15 @@
 
         loadShapes = loadedShapes.map(shape => ({
             ...shape,
-            loadColor: shape.savedColor
+            loadColor: shape.loadColor,
+            loadTop: shape.loadTop,
+            loadLeft: shape.loadLeft
         }));
         
         
     }
+
+
     $: combinedShapes = [...shapes, ...loadShapes];
 </script>
 
@@ -48,24 +81,29 @@
         <Create bind:width={customWidth} bind:height={customHeight} bind:borderRadius={customBorder} bind:rotation={customRotate} bind:savedColor={savedColor} {createShape} />  
     </div>
     <div class="content"> 
-                <!-- renders all created shapes       -->
-            {#each shapes as shape}
-                <Shapes width={shape.width} height={shape.height} borderRadius={shape.borderRadius} rotation={shape.rotation} 
-                savedColor={savedColor}/>
-            {/each}
-            <!-- renders all shapes loaded from local storage -->
-            {#each loadShapes as shape}             
-                <Shapes width={shape.width} height={shape.height} borderRadius={shape.borderRadius} rotation={shape.rotation} 
-                loadColor={shape.loadColor} savedColor={savedColor}/>
-            {/each}
+     
+        {#each combinedShapes as shape, index}
+            <Shapes 
+                width={shape.width} 
+                height={shape.height} 
+                borderRadius={shape.borderRadius} 
+                rotation={shape.rotation} 
+                savedColor={savedColor} 
+                loadColor={shape.loadColor}
+                loadTop={shape.loadTop}
+                loadLeft={shape.loadLeft}
+                on:colorChange={(event) => handleColorChange(event, index)}
+                on:positionChange={(event) => handlePositionChange(event, index)}
+            />
+            
+        {/each}
 
-        
 
     </div>
     <div class="right">
         
-        <ShapeList shapes={combinedShapes} onSave={updateShapes}/>
-        <SaveList shapes={combinedShapes} />
+        <ShapeList bind:shapes={combinedShapes} onSave={updateShapes}/>
+        <SaveList bind:shapes={combinedShapes} />
         <SaveFiles onLoad={loadShapesFromFile} />
     </div>
 </div>

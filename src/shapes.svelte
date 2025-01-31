@@ -1,4 +1,7 @@
 <script>
+
+    import { createEventDispatcher } from 'svelte';
+    const dispatch = createEventDispatcher();
     export let savedColor = { r: 255, g: 255, b: 255, a: 1 }; // Default color
     export let loadColor = { r: 100, g: 100, b: 100, a: 1};
     export let width; // Default width
@@ -13,12 +16,16 @@
 
     export let left = '0px';
     export let top = '0px';
+    export let loadTop = '0px';
+    export let loadLeft = '0px';
     
     let isDragging = false;
     let offsetX, offsetY; 
     let currentColor;
-    $: currentColor = `rgba(${loadColor.r}, ${loadColor.g}, ${loadColor.b}, ${loadColor.a})`;
-
+    
+    currentColor = `rgba(${loadColor.r}, ${loadColor.g}, ${loadColor.b}, ${loadColor.a})`;
+    top = loadTop;
+    left = loadLeft;
     function handleMouseDown(event) {
         isDragging = true;
         offsetX = event.clientX - parseInt(left);
@@ -31,17 +38,22 @@
         if (isDragging) {
             left = `${event.clientX - offsetX}px`;
             top = `${event.clientY - offsetY}px`;
+            dispatch('positionChange', { left, top });
         }
     }
     function handleMouseUp() {
         isDragging = false;
         window.removeEventListener('mousemove', handleMouseMove);
         window.removeEventListener('mouseup', handleMouseUp);
+        loadTop = top;
+        loadLeft = left;
     }
     
 
     function changeColor() {
         currentColor = `rgba(${savedColor.r}, ${savedColor.g}, ${savedColor.b}, ${savedColor.a})`; 
+        loadColor = currentColor;
+        dispatch('colorChange', { color: currentColor });
     }
 </script>
 

@@ -1,5 +1,6 @@
 <script>
     export let shapes = [];
+
     let saveName = '';
 
     function saveToLocalStorage() {
@@ -8,6 +9,7 @@
             return;
         }
         if (window.confirm(`Are you sure you want to save the shapes as "${saveName}"?`)) {
+            
             localStorage.setItem(saveName, JSON.stringify(shapes));
             alert(`Shapes saved to local storage as "${saveName}"`);
             saveName = '';
